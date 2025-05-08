@@ -13,7 +13,7 @@ python3 -m venv venv
 source venv/bin/activate
 
 echo "📦 Installing dependencies..."
-pip install fastapi uvicorn sqlalchemy pydantic bcrypt passlib python-jose python-dotenv
+pip install fastapi uvicorn sqlalchemy pydantic bcrypt passlib python-jose python-dotenv email-validator
 
 echo "📝 Creating project folder structure..."
 mkdir -p app/models app/routes app/schemas app/core app/db
