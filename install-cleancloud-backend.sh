@@ -63,4 +63,5 @@ EOF
 echo "✅ CleanCloud backend setup completed!"
 echo "👉 Next steps:"
 echo "  1. Implement models, schemas, routes inside 'app/'"
-echo "  2. Run the server: source venv/bin/activate && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+echo "  2. Run the server: source venv/bin/activate && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+"
