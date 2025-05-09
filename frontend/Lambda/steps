@@ -1,0 +1,15 @@
+✅ Steps to Create a Lambda Function in AWS Console
+Go to AWS Console → Search for “Lambda” → Open it.
+
+Click “Create function”
+
+Choose:
+  Author from scratch
+  Function name: getUserByEmail (or any name)
+  Runtime: Node.js 18.x
+
+Permissions:
+  Choose “Create a new role with basic Lambda permissions”
+
+Click “Create function”
+
