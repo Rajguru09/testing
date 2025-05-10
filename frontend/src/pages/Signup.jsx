@@ -40,9 +40,10 @@ export default function Signup() {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem('token', data.access_token);
+        // Store token securely (in sessionStorage as a more secure option)
+        sessionStorage.setItem('token', data.access_token);
         alert('Signup successful!');
-        navigate('/dashboard');  // Navigate to dashboard on success
+        navigate('/login');  // Navigate to login page after successful signup
       } else {
         setError(data.detail || 'Signup failed');
       }
