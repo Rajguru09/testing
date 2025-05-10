@@ -1,3 +1,6 @@
+import re
+import phonenumbers
+from phonenumbers import NumberParseException, is_valid_number, format_number, PhoneNumberFormat
 from fastapi import APIRouter, HTTPException
 from app.models.user import UserCreate, UserLogin, TokenOut
 from app.core.security import hash_password, verify_password, create_access_token
@@ -12,6 +15,20 @@ def get_user_by_email(email: str):
     response = table.get_item(Key={"email": email})
     return response.get("Item")
 
+# Mobile number validation using phonenumbers library
+def validate_mobile_number(mobile_number: str) -> bool:
+    try:
+        # Try parsing the mobile number with phonenumbers
+        parsed_number = phonenumbers.parse(mobile_number, None)  # `None` means no specific region is passed
+        if not is_valid_number(parsed_number):
+            return False
+        # Optionally format the number to international format
+        formatted_number = format_number(parsed_number, PhoneNumberFormat.INTERNATIONAL)
+        logger.info(f"Formatted number: {formatted_number}")
+        return True
+    except NumberParseException:
+        return False
+
 # Signup route
 @router.post("/signup", response_model=TokenOut)
 def signup(user_data: UserCreate):
@@ -20,11 +37,11 @@ def signup(user_data: UserCreate):
         logger.warning(f"Signup failed: Email {user_data.email} already registered.")
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    # Add validation for mobile number (check for country code and format)
+    # Validate mobile number format
     if not validate_mobile_number(user_data.mobile_number):
         logger.warning(f"Signup failed: Invalid mobile number format for {user_data.mobile_number}.")
         raise HTTPException(status_code=400, detail="Invalid mobile number format. Ensure it includes country code.")
-    
+
     uid = str(uuid.uuid4())
     hashed_pwd = hash_password(user_data.password)
 
@@ -69,8 +86,3 @@ def login(user_data: UserLogin):
     })
     logger.info(f"User {user_data.email} logged in successfully.")
     return {"access_token": token, "token_type": "bearer"}
-
-# Mobile number validation (simple check for country code and number format)
-def validate_mobile_number(mobile_number: str) -> bool:
-    # Simple regex for validating mobile number with country code (e.g., +1-555-5555555)
-    return bool(re.match(r'^\+?1?\d{9,15}$', mobile_number))  # Modify for specific country code validation
