@@ -30,7 +30,6 @@ Choose Upload from → .zip file
 Upload your lambda_function.zip
 
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<
->>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<>>>>>>>>>>>>>>>>><<<<<<<<<
 
 **To send the lambda_function.zip file from your local WSL (Ubuntu/Linux) environment to your AWS Lambda function, you have two common options:**
 ✅ Option 1: Upload using AWS Management Console
