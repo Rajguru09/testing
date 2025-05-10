@@ -55,9 +55,7 @@ aws configure
 Update the Lambda function
 Use this command (replace your-function-name with your actual Lambda function name):
 
-aws lambda update-function-code \
-  --function-name your-function-name \
-  --zip-file fileb://lambda_function.zip
+aws lambda update-function-code --function-name login_User --zip-file fileb://lambda_function.zip
 
 🔁 Quick Tip: Get function name from console
 Go to AWS Lambda > Your function > Copy the name and use in the CLI.
