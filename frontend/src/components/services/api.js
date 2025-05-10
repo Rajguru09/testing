@@ -65,3 +65,13 @@ export async function loginUser(userData) {
 export async function getUserDashboard(token) {
   return fetchAPI('/users/dashboard', 'GET', null, token);
 }
+
+// Get Cloud Audit Data
+export async function getCloudAuditData(token) {
+  return fetchAPI('/cloud-audit', 'GET', null, token);
+}
+
+// Get Idle Resources
+export async function getIdleResources(token) {
+  return fetchAPI('/idle-resources', 'GET', null, token);
+}
