@@ -2,6 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserDashboard } from "../components/services/api";
 
+// Loading Spinner Component
+const LoadingSpinner = () => (
+  <div className="spinner-container">
+    <div className="spinner"></div>
+    <p>Loading your dashboard...</p>
+  </div>
+);
+
 export default function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +29,8 @@ export default function Dashboard() {
         const data = await getUserDashboard(token);
         setUserData(data);
       } catch (err) {
-        setError(err.message || "Failed to fetch dashboard data");
+        setError(err.message || "Failed to fetch dashboard data.");
+        navigate("/login");  // Redirect to login if there's an error fetching data
       } finally {
         setLoading(false);
       }
@@ -39,8 +48,8 @@ export default function Dashboard() {
     });
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <LoadingSpinner />;
+  if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
     <div className="p-8 max-w-xl mx-auto">
