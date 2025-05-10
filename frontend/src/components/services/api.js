@@ -1,4 +1,3 @@
-// frontend/src/components/services/api.js
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Centralized response handler with improved error handling
@@ -28,6 +27,21 @@ const createHeaders = (token = null) => {
   return headers;
 };
 
+// Helper function to add timeout to fetch
+const fetchWithTimeout = async (url, options, timeout = 10000) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(timeoutId); // Clear the timeout if fetch is successful
+    return res;
+  } catch (err) {
+    clearTimeout(timeoutId); // Clear the timeout if fetch fails
+    throw err;
+  }
+};
+
 // Generic fetch API function to reduce redundancy
 const fetchAPI = async (url, method, data = null, token = null) => {
   const options = {
@@ -41,9 +55,18 @@ const fetchAPI = async (url, method, data = null, token = null) => {
   }
 
   try {
-    const res = await fetch(`${API_BASE_URL}${url}`, options);
+    const res = await fetchWithTimeout(`${API_BASE_URL}${url}`, options); // Using timeout wrapper
+    if (!res.ok) {
+      // If the response status is 401, token may have expired
+      if (res.status === 401) {
+        throw new Error("Session expired. Please log in again.");
+      }
+      const errorData = await res.json();
+      throw new Error(errorData?.detail || "Something went wrong with the request.");
+    }
     return await handleResponse(res); // Wait and return the response data
   } catch (err) {
+    // Handle error gracefully by providing a clear message
     throw new Error(`Error: ${err.message}`);
   }
 };
