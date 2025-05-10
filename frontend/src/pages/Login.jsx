@@ -1,7 +1,6 @@
-// frontend/src/pages/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../components/services/api";  // This will be a new function to handle login requests
+import { loginUser } from "../components/services/api";  // API function for handling login
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -27,8 +26,8 @@ export default function Login() {
       const response = await loginUser({ email, password });
 
       if (response?.access_token) {
-        // Store the JWT token in localStorage for later use
-        localStorage.setItem("access_token", response.access_token);
+        // Store the JWT token in sessionStorage (for session-based authentication)
+        sessionStorage.setItem("access_token", response.access_token);
         setLoading(false);
         navigate("/dashboard");  // Redirect to dashboard on successful login
       } else {
