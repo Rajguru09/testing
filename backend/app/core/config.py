@@ -14,7 +14,7 @@ class Settings:
     
     # DynamoDB settings
     DYNAMODB_TABLE: str = os.getenv("DYNAMODB_TABLE", "users")  # DynamoDB table name
-    AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")  # Default AWS region for DynamoDB
+    AWS_REGION: str = os.getenv("AWS_REGION", "ap-south-1")  # Default AWS region for DynamoDB
 
     # Validate essential environment variables
     if not JWT_SECRET_KEY:
