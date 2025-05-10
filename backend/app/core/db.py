@@ -3,28 +3,26 @@ from botocore.exceptions import ClientError
 from app.core.config import settings
 import logging
 
-# Set up logging to track the operation results
-logging.basicConfig(level=logging.INFO)
+# Set up logging
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
-# Initialize DynamoDB resource and client using the region from settings
-dynamodb = boto3.resource("dynamodb", region_name=settings.AWS_REGION)  # Use region from config
-dynamodb_client = boto3.client("dynamodb", region_name=settings.AWS_REGION)  # Use region from config
-
-# Table resource using the table name from settings
-table = dynamodb.Table(settings.DYNAMODB_TABLE)
-
-# Test to ensure we can access the table
+# Initialize DynamoDB resource and client
 try:
-    # Use the client to describe the table
+    dynamodb = boto3.resource("dynamodb", region_name=settings.AWS_REGION)
+    dynamodb_client = boto3.client("dynamodb", region_name=settings.AWS_REGION)
+
+    # Reference to the users table
+    table = dynamodb.Table(settings.DYNAMODB_TABLE)
+
+    # Check if table exists
     response = dynamodb_client.describe_table(TableName=settings.DYNAMODB_TABLE)
-    logger.info(f"Table '{settings.DYNAMODB_TABLE}' exists!")
+    logger.info(f"DynamoDB table '{settings.DYNAMODB_TABLE}' is accessible.")
 except ClientError as e:
-    # More specific error handling for DynamoDB-related errors
     error_code = e.response["Error"]["Code"]
     if error_code == "ResourceNotFoundException":
         logger.error(f"Table '{settings.DYNAMODB_TABLE}' does not exist!")
     else:
-        logger.error(f"Error accessing table: {e.response['Error']['Message']}")
+        logger.error(f"DynamoDB ClientError: {e.response['Error']['Message']}")
 except Exception as e:
-    logger.error(f"An unexpected error occurred: {str(e)}")
+    logger.error(f"Unexpected error accessing DynamoDB: {str(e)}")
