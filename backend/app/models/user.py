@@ -24,16 +24,19 @@ class UserCreate(BaseModel):
 
     @model_validator(mode="after")
     def validate_all(cls, values):
-        password = values.password
-        confirm_password = values.confirm_password
-        mobile_number = values.mobile_number
+        password = values.get('password')
+        confirm_password = values.get('confirm_password')
+        mobile_number = values.get('mobile_number')
 
+        # Passwords must match
         if password != confirm_password:
             raise ValueError("Passwords do not match")
 
+        # Password strength check
         if not password_strength(password):
             raise ValueError("Password must contain at least one uppercase letter, one number, and one special character.")
 
+        # Mobile number validation
         if not validate_mobile_number(mobile_number):
             raise ValueError("Invalid mobile number format. Include country code (e.g., +91...).")
 
