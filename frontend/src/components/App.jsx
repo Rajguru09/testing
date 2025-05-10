@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Signup from "../pages/Signup";
 import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard"; // Home Page
+import Dashboard from "../pages/Dashboard";
 import Settings from "../pages/Settings";
 import IdleResources from "../pages/IdleResources";
 import CloudAudit from "../pages/CloudAudit";
@@ -17,13 +17,20 @@ function App() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    setTimeout(() => {
+    // Simulate loading or authentication state, could be replaced with more real checks
+    const timer = setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 1000); // 1 second simulated loading
+    return () => clearTimeout(timer); // Cleanup timeout if the component is unmounted
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div> {/* Add a spinner or any loading animation */}
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
